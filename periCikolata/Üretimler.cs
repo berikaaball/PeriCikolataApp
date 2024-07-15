@@ -18,55 +18,37 @@ namespace periCikolata
         {
             InitializeComponent();
         }
-
-        #region Bağlantı Tanımlamaları
-
-        static string connectionString = "Data Source=DESKTOP-RORVUON\\SQLEXPRESS;Initial Catalog=PeriCikolata;Integrated Security=True";
-        SqlConnection connection = new SqlConnection(connectionString);
-        SqlCommand command = new SqlCommand();
-        SqlDataAdapter adapter = new SqlDataAdapter();
-        int affectedRows;
-
-        #endregion
-
         #region Bağlantı Olayları
-
-        private void KomutCalistir(string Komut)
+        private void UretimiSil()
         {
-            try
-            {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
-                command.Connection = connection;
-                command.CommandText = Komut;
-                affectedRows = command.ExecuteNonQuery();
+            string Komut = "Delete from UretimTablosu where UretimId = @UretimId";
+            VtIslem.command.Parameters.Clear();
+            VtIslem.command.Parameters.AddWithValue("@UretimId", dataGridView1.CurrentRow.Cells[0].Value.ToString());
+            VtIslem.KomutCalistir(Komut);
 
-            }
-            catch (Exception)
+            if (Periparam.affectedRows > 0)
             {
-                MessageBox.Show("Bağlantıda bir problem oluştu.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                
+                MessageBox.Show("Üretim silindi.");
+                VeriDoldur();
             }
-            finally
+            else
             {
-                if (connection.State == ConnectionState.Open)
-                    connection.Close();
+                MessageBox.Show("Üretim silinemedi. Lütfen tekrar deneyin.");
             }
-
+            VeriDoldur();
         }
-        private DataTable VeriGetir(string sec)
+        private void UrunleriGetir()
         {
-            DataTable uretimgoster = new DataTable();
-            adapter = new SqlDataAdapter(sec, connectionString);
-            adapter.Fill(uretimgoster);
-            return uretimgoster;
+            string sec = "Select UrunId from UrunlerTablosu";
+            CBoxUrunNo.DataSource = VtIslem.VeriGetir(sec);
+            //CBoxUrunNo.DisplayMember = "MalAdi";
+            CBoxUrunNo.ValueMember = "UrunId";
         }
         private void VeriDoldur()
         {
             string sec = "Select UretimId,UrunId,Uretimtarihi,UretimMiktari,UretimTutari from UretimTablosu";
-            dataGridView1.DataSource = VeriGetir(sec);
+            dataGridView1.DataSource = VtIslem.VeriGetir(sec);
         }
-
         private void BaslikGoster()
         {
             dataGridView1.Columns[0].HeaderText = "Üretim No";
@@ -92,97 +74,94 @@ namespace periCikolata
             dataGridView1.Columns[4].DefaultCellStyle.Format = "C2";
         }
         #endregion
-
         private void BtnUretimEkle_Click(object sender, EventArgs e)
         {
-            byte urunNo = Convert.ToByte(TBoxUrunNo.Text);
+            byte urunNo = Convert.ToByte(CBoxUrunNo.Text);
             byte uretimMiktar = Convert.ToByte(TBoxUretimMiktar.Text);
-            decimal uretimTutari = decimal.Parse(TBoxUretimTutar.Text);
+            double uretimTutari = double.Parse(TBoxUretimTutar.Text);
             DateTime uretimTarih = DTPUretim.Value;
 
-            if (TBoxUretimMiktar.Text.Trim() !="" & TBoxUretimTutar.Text.Trim() !="" & TBoxUrunNo.Text.Trim() !="")
+            if (TBoxUretimMiktar.Text.Trim() !="" & TBoxUretimTutar.Text.Trim() !="" & CBoxUrunNo.Text.Trim() !="")
             {
                 string Komut = "INSERT INTO UretimTablosu (UrunId,UretimTarihi,UretimMiktari,UretimTutari)" +
                     " VALUES (@UrunId,@UretimTarihi,@UretimMiktari,@UretimTutari)";
-                KomutCalistir(Komut);
-                {
-                    command.Parameters.AddWithValue("@UrunId", urunNo);
-                    command.Parameters.AddWithValue("@UretimTarihi", uretimTarih);
-                    command.Parameters.AddWithValue("@UretimMiktari", uretimMiktar);
-                    command.Parameters.AddWithValue("@UretimTutari", uretimTutari);
+                VtIslem.command.Parameters.Clear();
+               VtIslem.command.Parameters.AddWithValue("@UrunId", urunNo);
+                VtIslem.command.Parameters.AddWithValue("@UretimTarihi", uretimTarih);
+                VtIslem.command.Parameters.AddWithValue("@UretimMiktari", uretimMiktar);
+                VtIslem.command.Parameters.AddWithValue("@UretimTutari", uretimTutari);
+                VtIslem.KomutCalistir(Komut);
 
-                    KomutCalistir(Komut);
-                   
-                    if (affectedRows > 0)
+                Komut = "Insert Into StokHareketTablosu (UrunId,GuncelMiktar) Values (@UrunId,@GuncelMiktar)";
+                VtIslem.command.Parameters.Clear();
+                VtIslem.command.Parameters.AddWithValue("@UrunId", urunNo);
+                VtIslem.command.Parameters.AddWithValue("@GuncelMiktar", uretimMiktar);
+                VtIslem.KomutCalistir(Komut);
+
+                    if (Periparam.affectedRows > 0)
                     {
                         MessageBox.Show("Üretim eklendi.");
-                        TBoxUrunNo.Clear();
+                        //CBoxUrunNo.Items.Clear();
                         TBoxUretimNo.Clear();
                         TBoxUretimMiktar.Clear();
                         TBoxUretimTutar.Clear();
-
+                        VeriDoldur();
                     }
                     else
                     {
                         MessageBox.Show("Üretim eklenemedi. Lütfen tekrar deneyin.");
                     }
-
-                }
             }
             else
             {
                 MessageBox.Show("Tüm alanların dolu olduğundan emin olunuz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
-        private void BtnUretimiSil_Click(object sender, EventArgs e)
-        {
-            string Komut = "Delete from UretimTablosu where UrunId = @UrunId AND UretimId=@UretimId AND UretimTarihi=@UretimTarihi AND UretimMiktari=@UretimMiktari AND UretimTutari=@UretimTutari)";
-            KomutCalistir(Komut);
-            
-            if (affectedRows > 0)
-            {
-                MessageBox.Show("Üretim silindi.");
-                TBoxUrunNo.Clear();
-                TBoxUretimNo.Clear();
-                TBoxUretimMiktar.Clear();
-                TBoxUretimTutar.Clear();
-            }
-            else
-            {
-                MessageBox.Show("Üretim silinemedi. Lütfen tekrar deneyin.");
-            }
-        }
-
         private void BtnUretimGuncelle_Click(object sender, EventArgs e)
         {
-            string Komut = "Update UretimTablosu set UrunId='" + Convert.ToByte(TBoxUrunNo.Text) + "', UretimId='" + Convert.ToByte(TBoxUretimNo.Text) +
-                "', UretimTarihi='" + DTPUretim.Text + "', UretimMiktari='" + Convert.ToByte(TBoxUretimMiktar.Text) + "'," +
-                "UretimTutari='" + decimal.Parse(TBoxUretimTutar.Text) + "'";
-            KomutCalistir(Komut);
+            string Komut = "Update UretimTablosu set UrunId='" + Convert.ToInt16(CBoxUrunNo.Text) + "',UretimTarihi='" + DTPUretim.Value + "', UretimMiktari='" + Convert.ToInt16(TBoxUretimMiktar.Text) + "'," +
+                "UretimTutari='" + decimal.Parse(TBoxUretimTutar.Text) + "' Where UretimId ="+Convert.ToInt16(dataGridView1.CurrentRow.Cells[0].Value)+" ";
+            VtIslem.KomutCalistir(Komut);
 
-            if (affectedRows > 0)
+            if (Periparam.affectedRows > 0)
             {
                 MessageBox.Show("Üretim güncellendi.");
-                TBoxUrunNo.Clear();
+                //CBoxUrunNo.Items.Clear();
                 TBoxUretimNo.Clear();
                 TBoxUretimMiktar.Clear();
                 TBoxUretimTutar.Clear();
-
-                
+                VeriDoldur();
             }
             else
             {
                 MessageBox.Show("Üretim güncellenemedi. Lütfen tekrar deneyin.");
             }
         }
-
         private void Üretimler_Load(object sender, EventArgs e)
         {
+            UrunleriGetir();
             VeriDoldur();
             BaslikGoster();
             BtnUretimGuncelle.Enabled= false;
-            BtnUretimiSil.Enabled= false;
+        }
+        private void güncelleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BtnUretimEkle.Enabled=false;
+            BtnUretimGuncelle.Enabled = true;
+            TBoxUretimNo.Text = dataGridView1.CurrentRow.Cells[0].Value.ToString();
+            CBoxUrunNo.Text = dataGridView1.CurrentRow.Cells[1].Value.ToString();
+            TBoxUretimMiktar.Text = dataGridView1.CurrentRow.Cells[3].Value.ToString();
+            TBoxUretimTutar.Text = dataGridView1.CurrentRow.Cells[4].Value.ToString();
+            DTPUretim.Value = Convert.ToDateTime(dataGridView1.CurrentRow.Cells[2].Value);
+        }
+        private void silToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Seçili üretim işlemini \nsilmek istediğinizden emin misiniz?", "Uyarı",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                UretimiSil();
+            }
+            
         }
     }
 }

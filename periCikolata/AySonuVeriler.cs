@@ -19,55 +19,14 @@ namespace periCikolata
         }
         #region Bağlantı Tanımlamaları
 
-        static string connectionString = "Data Source=DESKTOP-RORVUON\\SQLEXPRESS;Initial Catalog=PeriCikolata;Integrated Security=True";
-        SqlConnection connection = new SqlConnection(connectionString);
-        SqlCommand command = new SqlCommand();
-        SqlDataAdapter adapter = new SqlDataAdapter();
-        int affectedRows;
-
         #endregion
 
         #region Bağlantı Olayları
-
-        private void KomutCalistir(string Komut)
-        {
-            try
-            {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
-                command.Connection = connection;
-                command.CommandText = Komut;
-                affectedRows = command.ExecuteNonQuery();
-
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Bağlantıda bir problem oluştu.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-            }
-            finally
-            {
-                if (connection.State == ConnectionState.Open)
-                    connection.Close();
-            }
-
-        }
-
-        private DataTable VeriGetir(string sec)
-        {
-            DataTable verigoster = new DataTable();
-            adapter = new SqlDataAdapter(sec, connectionString);
-            adapter.Fill(verigoster);
-            return verigoster;
-        }
-
-        #endregion
-
         private void UrtmGrBtn_Click(object sender, EventArgs e)
         {
-            string sec = "Select UretimId,UrunId,Uretimtarihi,UretimMiktari,UretimTutari from UretimTablosu " +
-                "where UretimTarihi = '"+dateTimePicker1.Value.ToString("yyyy-MM-dd")+"' ";
-            dataGridView1.DataSource = VeriGetir(sec);
+            string sec = "Select UretimId,UrunId,UretimTarihi,UretimMiktari,UretimTutari from UretimTablosu " +
+                "where Convert(date,UretimTarihi) >= '" + monthCalendar1.SelectionStart + "' AND Convert(date,UretimTarihi) <= '" + monthCalendar1.SelectionEnd + "'";
+            dataGridView1.DataSource = VtIslem.VeriGetir(sec);
 
             dataGridView1.Columns[0].HeaderText = "Üretim No";
             dataGridView1.Columns[0].Width = 60;
@@ -89,14 +48,18 @@ namespace periCikolata
             dataGridView1.Columns[4].Width = 90;
             dataGridView1.Columns[4].DefaultCellStyle.Alignment =
                 DataGridViewContentAlignment.MiddleCenter;
-            
+
+            int netsayi = dataGridView1.Rows.Count;
+            TBoxNetSayi.Text = netsayi.ToString();
+
         }
 
         private void StsGrBtn_Click(object sender, EventArgs e)
         {
             string sec = "Select SatisId,KutulamaId,SatisTuru,SatisMiktari,SatisTutari,SatisTarihi from SatisTablosu " +
-                "where SatisTarihi = '"+dateTimePicker1.Value.ToString("yyyy-MM-dd") +"'";
-            dataGridView1.DataSource = VeriGetir(sec);
+                "where Convert(date,SatisTarihi) >= '" + monthCalendar1.SelectionStart + "' AND Convert(date,SatisTarihi) <= '" + monthCalendar1.SelectionEnd + "'";
+            dataGridView1.DataSource = VtIslem.VeriGetir(sec);
+
 
             dataGridView1.Columns[0].HeaderText = "Satış No";
             dataGridView1.Columns[0].Width = 60;
@@ -122,14 +85,19 @@ namespace periCikolata
             dataGridView1.Columns[5].Width = 90;
             dataGridView1.Columns[5].DefaultCellStyle.Alignment =
                 DataGridViewContentAlignment.MiddleCenter;
+
+            int netsayi = dataGridView1.Rows.Count;
+            TBoxNetSayi.Text = netsayi.ToString();
         }
 
         private void MlytBtn_Click(object sender, EventArgs e)
         {
-            string sec = "Select AlimNo,MalId,MalSKT,AlimMiktari,OdemeTuru,AlimTutari,AlimTarihi from AlimTablosu " +
-                "where AlimTarihi= '"+ dateTimePicker1.Value.ToString("dd-MM-yyyy") + "'";
-            dataGridView1.DataSource = VeriGetir(sec);
-            //
+            //Select al.AlimNo,mal.MalId, mal.MalAdi,al.MalSKT,al.AlimMiktari,al.OdemeTuru,
+            //    al.AlimTutari,al.AlimTarihi from AlimTablosu al, MalTablosu mal where al.MalId = mal.MalId
+            string sec = "Select al.AlimNo,mal.MalAdi,al.AlimMiktari,al.OdemeTuru,al.AlimTutari,al.AlimTarihi from AlimTablosu al, MalTablosu mal" +
+                " where al.MalId=mal.MalId and (Convert(date,AlimTarihi) >= '" + monthCalendar1.SelectionStart + "' AND Convert(date,AlimTarihi) <= '" + monthCalendar1.SelectionEnd + "')";
+            dataGridView1.DataSource = VtIslem.VeriGetir(sec);
+
             dataGridView1.Columns[0].HeaderText = "Alım No";
             dataGridView1.Columns[0].Width = 60;
             dataGridView1.Columns[0].DefaultCellStyle.Alignment =
@@ -154,6 +122,41 @@ namespace periCikolata
             dataGridView1.Columns[5].Width = 90;
             dataGridView1.Columns[5].DefaultCellStyle.Alignment =
                 DataGridViewContentAlignment.MiddleCenter;
+
+            int netsayi = dataGridView1.Rows.Count;
+            TBoxNetSayi.Text = netsayi.ToString();
         }
+
+        private void WorkshopGorBtn_Click(object sender, EventArgs e)
+        {
+            string sec = "Select EtkinlikId,EtkinlikAdi,Kapasite,Tarih,Adres from Workshop " +
+                "where Convert(date,Tarih) >= '" + monthCalendar1.SelectionStart + "' AND Convert(date,Tarih) <= '" + monthCalendar1.SelectionEnd + "'";
+            dataGridView1.DataSource = VtIslem.VeriGetir(sec);
+
+            dataGridView1.Columns[0].HeaderText = "Etkinlik No";
+            dataGridView1.Columns[0].Width = 60;
+            dataGridView1.Columns[0].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+            dataGridView1.Columns[1].HeaderText = "Etkinlik Adı";
+            dataGridView1.Columns[1].Width = 100;
+            dataGridView1.Columns[1].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+            dataGridView1.Columns[2].HeaderText = "Kapasite";
+            dataGridView1.Columns[2].Width = 70;
+            dataGridView1.Columns[2].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+            dataGridView1.Columns[3].HeaderText = "Tarih";
+            dataGridView1.Columns[3].Width = 90;
+            dataGridView1.Columns[3].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+            dataGridView1.Columns[4].HeaderText = "Adres";
+            dataGridView1.Columns[4].Width = 90;
+            dataGridView1.Columns[4].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+
+            int netsayi = dataGridView1.Rows.Count;
+            TBoxNetSayi.Text = netsayi.ToString();
+        }
+        #endregion
     }
 }

@@ -14,7 +14,7 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -70,12 +70,19 @@
     <Compile Include="Alımlar.Designer.cs">
       <DependentUpon>Alımlar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Mallar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Mallar.Designer.cs">
+      <DependentUpon>Mallar.cs</DependentUpon>
+    </Compile>
     <Compile Include="MüşteriKayıt.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MüşteriKayıt.Designer.cs">
       <DependentUpon>MüşteriKayıt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Periparam.cs" />
     <Compile Include="PeriÇikolata.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +97,14 @@
     <Compile Include="Satışlar.Designer.cs">
       <DependentUpon>Satışlar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stok.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Stok.Designer.cs">
+      <DependentUpon>Stok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VtBaglanti.cs" />
+    <Compile Include="VtIslem.cs" />
     <Compile Include="Workshop.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +135,9 @@
     <EmbeddedResource Include="Alımlar.resx">
       <DependentUpon>Alımlar.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Mallar.resx">
+      <DependentUpon>Mallar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MüşteriKayıt.resx">
       <DependentUpon>MüşteriKayıt.cs</DependentUpon>
     </EmbeddedResource>
@@ -137,6 +155,9 @@
     </Compile>
     <EmbeddedResource Include="Satışlar.resx">
       <DependentUpon>Satışlar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stok.resx">
+      <DependentUpon>Stok.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Workshop.resx">
       <DependentUpon>Workshop.cs</DependentUpon>

@@ -17,53 +17,29 @@ namespace periCikolata
         {
             InitializeComponent();
         }
-
-        #region Bağlantı Tanımlamaları
-
-        static string connectionString = "Data Source=DESKTOP-RORVUON\\SQLEXPRESS;Initial Catalog=PeriCikolata;Integrated Security=True";
-        SqlConnection connection = new SqlConnection(connectionString);
-        SqlCommand command = new SqlCommand();
-        SqlDataAdapter adapter = new SqlDataAdapter();
-        int affectedRows;
-        #endregion
-
         #region Bağlantı Olayları
-
-        private void KomutCalistir(string Komut)
+        private void EtkinlikSil()
         {
-            try
+            string Komut = "Delete from Workshop where EtkinlikId = @EtkinlikId";
+            VtIslem.command.Parameters.Clear();
+            VtIslem.command.Parameters.AddWithValue("@EtkinlikId", dataGridView1.CurrentRow.Cells[0].Value.ToString());
+            VtIslem.KomutCalistir(Komut);
+            if (Periparam.affectedRows > 0)
             {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
-                command.Connection = connection;
-                command.CommandText = Komut;
-                affectedRows = command.ExecuteNonQuery();
-
+                MessageBox.Show("Etkinlik silindi.");
+                VeriDoldur();
             }
-            catch (Exception)
+            else
             {
-                MessageBox.Show("Bağlantıda bir problem oluştu.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+                MessageBox.Show("Etkinlik silinemedi.Lütfen tekrar deneyiniz.");
             }
-            finally
-            {
-                if (connection.State == ConnectionState.Open)
-                    connection.Close();
-            }
+            VeriDoldur();
         }
-        private DataTable VeriGetir(string sec)
-        {
-            DataTable etkinlikgoster = new DataTable();
-            adapter = new SqlDataAdapter(sec, connectionString);
-            adapter.Fill(etkinlikgoster);
-            return etkinlikgoster;
-        }
-        private void VeriDoldur()
+         private void VeriDoldur()
         {
             string sec = "Select EtkinlikId,EtkinlikAdi,Kapasite,Tarih,Adres from Workshop";
-            dataGridView1.DataSource = VeriGetir(sec);
+            dataGridView1.DataSource = VtIslem.VeriGetir(sec);
         }
-
         private void BaslikGoster()
         {
             dataGridView1.Columns[0].HeaderText = "Etkinlik No";
@@ -87,9 +63,7 @@ namespace periCikolata
             dataGridView1.Columns[4].DefaultCellStyle.Alignment =
                 DataGridViewContentAlignment.MiddleCenter;
         }
-
         #endregion
-
         private void EtkKaydetBtn_Click_1(object sender, EventArgs e)
         {
             string etkadi = EtkAdTBox.Text;
@@ -99,58 +73,37 @@ namespace periCikolata
 
                 string Komut = "INSERT INTO Workshop (EtkinlikAdi,Tarih,Kapasite,Adres)" +
                     " VALUES (@EtkinlikAdi,@Tarih,@Kapasite,@Adres)";
-                using (SqlCommand command = new SqlCommand(Komut, connection))
-                {
-                    command.Parameters.AddWithValue("@EtkinlikAdi", etkadi);
-                    command.Parameters.AddWithValue("@Tarih", etktarih);
-                    command.Parameters.AddWithValue("@Adres", adres);
-                    command.Parameters.AddWithValue("@Kapasite", kapasite);
+            VtIslem.command.Parameters.Clear();
+            VtIslem.command.Parameters.AddWithValue("@EtkinlikAdi", etkadi);
+            VtIslem.command.Parameters.AddWithValue("@Tarih", etktarih);
+            VtIslem.command.Parameters.AddWithValue("@Kapasite", kapasite);
+            VtIslem.command.Parameters.AddWithValue("@Adres", adres);
 
-                KomutCalistir(Komut);
+            VtIslem.KomutCalistir(Komut);
 
-                    if (affectedRows > 0)
-                    {
-                        MessageBox.Show("Etkinlik kaydedildi.");
-                        EtkNoTBox.Clear();
-                        EtkAdTBox.Clear();
-                        KapasiteTBox.Clear();
-                        AdresTBox.Clear();
-
-                    }
-                    else
-                    {
-                        MessageBox.Show("Etkinlik kaydedilemedi. Lütfen tekrar deneyin.");
-                    }
-                }
-        }
-
-        private void BtnEtkinlikSil_Click(object sender, EventArgs e)
-        {
-            string Komut = "Delete from Workshop where EtkinlikId = @EtkinlikId)";
-            KomutCalistir(Komut);
-
-            if (affectedRows > 0)
+            if (Periparam.affectedRows > 0)
             {
-                MessageBox.Show("Workshop silindi.");
-                AdresTBox.Clear();
-                EtkAdTBox.Clear();
-                EtkNoTBox.Clear();
-                KapasiteTBox.Clear();
+             MessageBox.Show("Etkinlik kaydedildi.");
+             EtkNoTBox.Clear();
+             EtkAdTBox.Clear();
+             KapasiteTBox.Clear();
+             AdresTBox.Clear();
+                    
             }
             else
             {
-                MessageBox.Show("Workshop silinemedi. Lütfen tekrar deneyin.");
+               MessageBox.Show("Etkinlik kaydedilemedi. Lütfen tekrar deneyin.");
             }
+            VeriDoldur();
         }
-
         private void BtnEtkinlikGuncelle_Click(object sender, EventArgs e)
         {
             string Komut = "Update Workshop set EtkinlikAdi='" + EtkAdTBox.Text +
                "', Tarih='" + dateTimePicker1.Value + "', Adres='" + AdresTBox.Text + "'," +
-               "Kapasite='" + Convert.ToInt16(KapasiteTBox.Text) + "'";
-            KomutCalistir(Komut);
+               "Kapasite='" + Convert.ToInt16(KapasiteTBox.Text) + "' where EtkinlikId= '"+EtkNoTBox.Text+"'";
+            VtIslem.KomutCalistir(Komut);
 
-            if (affectedRows > 0)
+            if (Periparam.affectedRows > 0)
             {
                 MessageBox.Show("Workshop güncellendi.");
                 AdresTBox.Clear();
@@ -162,14 +115,32 @@ namespace periCikolata
             {
                 MessageBox.Show("Workshop güncellenemedi. Lütfen tekrar deneyin.");
             }
+            VeriDoldur();
+            BtnEtkinlikGuncelle.Enabled = false;
+            EtkKaydetBtn.Enabled = true;
         }
-
         private void Workshop_Load(object sender, EventArgs e)
         {
             VeriDoldur();
             BaslikGoster();
             BtnEtkinlikGuncelle.Enabled = false;
-            BtnEtkinlikSil.Enabled = false;
+        }
+        private void güncelleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BtnEtkinlikGuncelle.Enabled = true;
+            EtkKaydetBtn.Enabled = false;
+            AdresTBox.Text = dataGridView1.CurrentRow.Cells[4].Value.ToString();
+            EtkAdTBox.Text = dataGridView1.CurrentRow.Cells[1].Value.ToString();
+            EtkNoTBox.Text = dataGridView1.CurrentRow.Cells[0].Value.ToString();
+            KapasiteTBox.Text = dataGridView1.CurrentRow.Cells[2].Value.ToString();
+            dateTimePicker1.Value = Convert.ToDateTime(dataGridView1.CurrentRow.Cells[3].Value);
+        }
+
+        private void silToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Seçili etkinliği silmek istediğinizden \nemin misiniz?", "Uyarı", 
+                MessageBoxButtons.YesNo) == DialogResult.Yes);
+            EtkinlikSil();
         }
     }
 }

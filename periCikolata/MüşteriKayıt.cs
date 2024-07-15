@@ -17,54 +17,33 @@ namespace periCikolata
         {
             InitializeComponent();
         }
-        #region Bağlantı Tanımlamaları
-
-        static string connectionString = "Data Source=DESKTOP-RORVUON\\SQLEXPRESS;Initial Catalog=PeriCikolata;Integrated Security=True";
-        SqlConnection connection = new SqlConnection(connectionString);
-        SqlCommand command = new SqlCommand();
-        SqlDataAdapter adapter = new SqlDataAdapter();
-        int affectedRows;
+        #region Bağlantı Tanımlamaları    
 
         #endregion
-        #region Bağlantı Olayları
-
-        private void KomutCalistir(string Komut)
+        #region Bağlantı Olayları   
+        private void MusteriSil()
         {
-            try
+            string Komut = "Delete from MusteriBilgileri where MusteriNo = @MusteriNo";
+            VtIslem.command.Parameters.Clear();
+            VtIslem.command.Parameters.AddWithValue("@MusteriNo", dataGridView1.CurrentRow.Cells[0].Value.ToString());
+            VtIslem.KomutCalistir(Komut);
+
+            if (Periparam.affectedRows > 0)
             {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
-                command.Connection = connection;
-                command.CommandText = Komut;
-                affectedRows = command.ExecuteNonQuery();
-
+                MessageBox.Show("Müşteri silindi.");
+                VeriDoldur();
             }
-            catch (Exception)
+            else
             {
-                MessageBox.Show("Bağlantıda bir problem oluştu.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+                MessageBox.Show("Müşteri silinemedi. Lütfen tekrar deneyin.");
             }
-            finally
-            {
-                if (connection.State == ConnectionState.Open)
-                    connection.Close();
-            }
-
-        }
-
-        private DataTable VeriGetir(string sec)
-        {
-            DataTable musterigoster = new DataTable();
-            adapter = new SqlDataAdapter(sec, connectionString);
-            adapter.Fill(musterigoster);
-            return musterigoster;
+            VeriDoldur();
         }
         private void VeriDoldur()
         {
             string sec = "Select MusteriNo,MusteriAdi,MusteriSoyadi,MusteriSirketi,MusteriTelefon from MusteriBilgileri";
-            dataGridView1.DataSource = VeriGetir(sec);
+            dataGridView1.DataSource = VtIslem.VeriGetir(sec);
         }
-
         private void BaslikGoster()
         {
             dataGridView1.Columns[0].HeaderText = "Müşteri No";
@@ -87,67 +66,61 @@ namespace periCikolata
             dataGridView1.Columns[4].Width = 90;
             dataGridView1.Columns[4].DefaultCellStyle.Alignment =
                 DataGridViewContentAlignment.MiddleCenter;
-            
         }
         #endregion
-
         private void MüşteriKayıt_Load(object sender, EventArgs e)
         {
             VeriDoldur();
             BaslikGoster();
             BtnMusteriGuncelle.Enabled = false;
-            BtnSil.Enabled = false;
         }
-
         private void BtnMusteriEkle_Click(object sender, EventArgs e)
         {
             string ad = TBoxMusteriAdi.Text;
             string soyad = TBoxSoyad.Text;
             string sirket = TBoxFirmaAdi.Text;
-            //int telefon;
-            //if (int.TryParse(TBoxTelefon.Text,out telefon))
-            //{
-                
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Lütfen geçerli bir telefon numarası giriniz.");
-            //}
-
-            string Komut = "Insert Into MusteriBilgileri (MusteriAdi,MusteriSoyadi,MusteriSirketi,MusteriTelefon) Values " +
-                "(@MusteriAdi,@MusteriSoyadi,@MusteriSirketi,@MusteriTelefon)";
-            command.Parameters.AddWithValue("MusteriAdi", ad);
-            command.Parameters.AddWithValue("MusteriSoyadi", soyad);
-            command.Parameters.AddWithValue("MusteriSirketi", sirket);
-            //command.Parameters.AddWithValue("MusteriTelefon", telefon);
-
-            KomutCalistir(Komut);
-
-            if (affectedRows > 0)
+            string telefon = TBoxTelefon.Text;
+            if (TBoxTelefon.Text.Length> 10 || TBoxTelefon.Text.Length < 10)
             {
-                MessageBox.Show("Müşteri eklendi.","Bilgi",MessageBoxButtons.OK);
-                TBoxMusteriNo.Text = "";
-                TBoxMusteriAdi.Text = "";
-                TBoxSoyad.Text = "";
-                TBoxFirmaAdi.Text = "";
-                TBoxTelefon.Text = "";
+                MessageBox.Show("Lütfen geçerli bir telefon numarası giriniz.");
+                TBoxTelefon.Select();
+                return;
             }
             else
             {
-                MessageBox.Show("Müşteri eklenemedi.","Bilgi",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string Komut = "Insert Into MusteriBilgileri (MusteriAdi,MusteriSoyadi,MusteriSirketi,MusteriTelefon) Values " +
+                    "(@MusteriAdi,@MusteriSoyadi,@MusteriSirketi,@MusteriTelefon)";
+                VtIslem.command.Parameters.AddWithValue("MusteriAdi", ad);
+                VtIslem.command.Parameters.AddWithValue("MusteriSoyadi", soyad);
+                VtIslem.command.Parameters.AddWithValue("MusteriSirketi", sirket);
+                VtIslem.command.Parameters.AddWithValue("MusteriTelefon", telefon);
+
+                VtIslem.KomutCalistir(Komut);
+
+                if (Periparam.affectedRows > 0)
+                {
+                    MessageBox.Show("Müşteri eklendi.", "Bilgi", MessageBoxButtons.OK);
+                    TBoxMusteriNo.Text = "";
+                    TBoxMusteriAdi.Text = "";
+                    TBoxSoyad.Text = "";
+                    TBoxFirmaAdi.Text = "";
+                    TBoxTelefon.Text = "";
+                }
+                else
+                {
+                    MessageBox.Show("Müşteri eklenemedi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                VeriDoldur();
             }
-
-            VeriDoldur();
         }
-
         private void BtnMusteriGuncelle_Click(object sender, EventArgs e)
         {
             string Komut = "Update MusteriBilgileri Set MusteriAdi= '"+TBoxMusteriAdi.Text+"'," +
                 " MusteriSoyadi= '"+TBoxSoyad.Text+"', MusteriSirketi = '"+TBoxFirmaAdi.Text+"'," +
-                " MusteriTelefon= '"+Convert.ToInt16(TBoxTelefon.Text)+"' ";
-            KomutCalistir(Komut);
+                " MusteriTelefon= '"+TBoxTelefon.Text+"' Where MusteriNo = '"+TBoxMusteriNo.Text+"'";
+            VtIslem.KomutCalistir(Komut);
 
-            if (affectedRows > 0)
+            if (Periparam.affectedRows > 0)
             {
                 MessageBox.Show("Müşteri güncellendi.","Bilgi",MessageBoxButtons.OK);
 
@@ -156,21 +129,26 @@ namespace periCikolata
             {
                 MessageBox.Show("Müşteri güncellenemedi. Lütfen tekrar deneyin.","Bilgi",MessageBoxButtons.OK);
             }
+            VeriDoldur();
+            BtnMusteriGuncelle.Enabled = false;
+            BtnMusteriEkle.Enabled = true;
+        }
+        private void güncelleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BtnMusteriEkle.Enabled= false;
+            BtnMusteriGuncelle.Enabled= true;
+            TBoxFirmaAdi.Text = dataGridView1.CurrentRow.Cells[3].Value.ToString();
+            TBoxMusteriAdi.Text = dataGridView1.CurrentRow.Cells[1].Value.ToString();
+            TBoxMusteriNo.Text= dataGridView1.CurrentRow.Cells[0].Value.ToString();
+            TBoxSoyad.Text = dataGridView1.CurrentRow.Cells[2].Value.ToString();
+            TBoxTelefon.Text = dataGridView1.CurrentRow.Cells[4].Value.ToString();
         }
 
-        private void BtnSil_Click(object sender, EventArgs e)
+        private void silToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string Komut = "Delete from MusteriBilgileri where MusteriNo=@MusteriNo";
-            KomutCalistir(Komut);
-
-            if (affectedRows > 0)
+            if (MessageBox.Show("Seçili Müşteriyi \nSilmek istiyor musunuz?", "Silme Onayı", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                MessageBox.Show("Müşteri silindi.");
-                TBoxMusteriNo.Text = "";
-                TBoxMusteriAdi.Text = "";
-                TBoxSoyad.Text = "";
-                TBoxFirmaAdi.Text = "";
-                TBoxTelefon.Text = "";
+                MusteriSil();
             }
         }
     }

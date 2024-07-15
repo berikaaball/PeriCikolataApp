@@ -17,54 +17,32 @@ namespace periCikolata
         {
             InitializeComponent();
         }
-
         #region Bağlantı Tanımlamaları
-
-        static string connectionString = "Data Source=DESKTOP-RORVUON\\SQLEXPRESS;Initial Catalog=PeriCikolata;Integrated Security=True";
-        SqlConnection connection = new SqlConnection(connectionString);
-        SqlCommand command = new SqlCommand();
-        SqlDataAdapter adapter = new SqlDataAdapter();
-        int affectedRows;
-
         #endregion
-
         #region Bağlantı Olayları
-
-        private void KomutCalistir(string Komut)
+        private void SatisSil()
         {
-            try
-            {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
-                command.Connection = connection;
-                command.CommandText = Komut;
-                affectedRows = command.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Bağlantıda bir problem oluştu.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            string Komut = "Delete from SatisTablosu where SatisNo = @SatisNo";
+            VtIslem.command.Parameters.Clear();
+            VtIslem.command.Parameters.AddWithValue("@SatisNo", dataGridView1.CurrentRow.Cells[0].Value.ToString());
+            VtIslem.KomutCalistir(Komut);
 
-            }
-            finally
+            if (Periparam.affectedRows > 0)
             {
-                if (connection.State == ConnectionState.Open)
-                    connection.Close();
+                MessageBox.Show("Satış silindi.");
+                VeriDoldur();
             }
-
-        }
-        private DataTable VeriGetir(string sec)
-        {
-            DataTable satisgoster = new DataTable();
-            adapter = new SqlDataAdapter(sec, connectionString);
-            adapter.Fill(satisgoster);
-            return satisgoster;
+            else
+            {
+                MessageBox.Show("Satış silinemedi. Lütfen tekrar deneyin.");
+            }
+            VeriDoldur();
         }
         private void VeriDoldur()
         {
             string sec = "Select SatisId,KutulamaId,SatisTuru,SatisMiktari,SatisTutari,SatisTarihi from SatisTablosu";
-            dataGridView1.DataSource = VeriGetir(sec);
+            dataGridView1.DataSource = VtIslem.VeriGetir(sec);
         }
-
         private void BaslikGoster()
         {
             dataGridView1.Columns[0].HeaderText = "Satış No";
@@ -93,30 +71,33 @@ namespace periCikolata
                 DataGridViewContentAlignment.MiddleCenter;
         }
         #endregion
-
         private void BtnSatisEkle_Click(object sender, EventArgs e)
         {
-            byte kutulamaNo = Convert.ToByte(TBoxKutulama.Text);
+            int kutulamaNo = Convert.ToInt16(TBoxKutulama.Text);
             string satisTuru = CBoxSatisTuru.SelectedItem.ToString();
-            byte satisMiktar = Convert.ToByte(TBoxSatisMiktar.Text);
+            int satisMiktar = Convert.ToInt16(TBoxSatisMiktar.Text);
             decimal satisTutari = decimal.Parse(TBoxSatisTutari.Text);
             DateTime satisTarihi = DTPSatis.Value;
           
             string Komut = "INSERT INTO SatisTablosu (KutulamaId,SatisTuru,SatisMiktari,SatisTutari,SatisTarihi)" +
                 " VALUES (@KutulamaId,@SatisTuru,@SatisMiktari,@SatisTutari,@SatisTarihi)";
 
-            command.Parameters.AddWithValue("@KutulamaId", kutulamaNo);
-            command.Parameters.AddWithValue("@SatisTuru", satisTuru);
-            command.Parameters.AddWithValue("@SatisMiktari", satisMiktar);
-            command.Parameters.AddWithValue("@SatisTutari", satisTutari);
-            command.Parameters.AddWithValue("@SatisTarihi", satisTarihi);
+            VtIslem.command.Parameters.Clear();
+           VtIslem.command.Parameters.AddWithValue("@KutulamaId", kutulamaNo);
+            VtIslem.command.Parameters.AddWithValue("@SatisTuru", satisTuru);
+            VtIslem.command.Parameters.AddWithValue("@SatisMiktari", satisMiktar);
+            VtIslem.command.Parameters.AddWithValue("@SatisTutari", satisTutari);
+            VtIslem.command.Parameters.AddWithValue("@SatisTarihi", satisTarihi);
+            VtIslem.KomutCalistir(Komut);
 
-            KomutCalistir(Komut);
-
-            if (affectedRows > 0)
+            if (Periparam.affectedRows > 0)
             {
                 MessageBox.Show("Satış eklendi.");
-
+                TBoxKutulama.Clear();
+                TBoxSatisMiktar.Clear();
+                TBoxSatisNo.Clear();
+                TBoxSatisTutari.Clear();
+                CBoxSatisTuru.Items.Clear();
             }
             else
             {
@@ -124,36 +105,14 @@ namespace periCikolata
             }
             VeriDoldur();
         }
-    
-        private void BtnSatisSil_Click(object sender, EventArgs e)
-        {
-            string Komut = "Delete from SatisTablosu where SatisId = @SatisId)";
-
-            KomutCalistir(Komut);
-
-            if (affectedRows > 0)
-            {
-                MessageBox.Show("Satış silindi.");
-                TBoxKutulama.Clear();
-                TBoxSatisMiktar.Clear();
-                TBoxSatisNo.Clear();
-                TBoxSatisTutari.Clear();
-                CBoxSatisTuru.Items.Clear();
-            }
-            else
-            {
-                MessageBox.Show("Satış silinemedi. Lütfen tekrar deneyin.");
-            }
-        }
-
         private void BtnSatisGuncelle_Click(object sender, EventArgs e)
         {
-            string Komut = "Update SatisTablosu set SatisId='" + Convert.ToByte(TBoxSatisNo.Text) + "', SatisTuru='" + CBoxSatisTuru.SelectedItem.ToString() +
-              "', KutulamaId='" + Convert.ToByte(TBoxKutulama.Text) + "', SatisTuru='" + CBoxSatisTuru.SelectedItem.ToString() + "'," +
-              "SatisMiktari='" + Convert.ToByte(TBoxSatisMiktar.Text) + "',SatisMiktari='" + decimal.Parse(TBoxSatisTutari.Text) + "',SatisTarihi='" + DTPSatis.Value + "'";
-            KomutCalistir(Komut);
+            string Komut = "Update SatisTablosu set SatisTuru='" + CBoxSatisTuru.SelectedItem.ToString() +
+              "', KutulamaId='" + Convert.ToInt16(TBoxKutulama.Text) + "', SatisTuru='" + CBoxSatisTuru.SelectedItem.ToString() + "'," +
+              "SatisMiktari='" + Convert.ToInt16(TBoxSatisMiktar.Text) + "',SatisMiktari='" + decimal.Parse(TBoxSatisTutari.Text) + "',SatisTarihi='" + DTPSatis.Value + "' Where SatisId='" + Convert.ToByte(TBoxSatisNo.Text) + "'";
+            VtIslem.KomutCalistir(Komut);
 
-            if (affectedRows > 0)
+            if (Periparam.affectedRows > 0)
             {
                 MessageBox.Show("Satış güncellendi.");
                 TBoxKutulama.Clear();
@@ -161,22 +120,37 @@ namespace periCikolata
                 TBoxSatisNo.Clear();
                 TBoxSatisTutari.Clear();
                 CBoxSatisTuru.Items.Clear();
-
-
             }
             else
             {
                 MessageBox.Show("Satış güncellenemedi. Lütfen tekrar deneyin.");
             }
+            VeriDoldur();
         }
-
         private void Satışlar_Load(object sender, EventArgs e)
         {
             VeriDoldur();
             BaslikGoster();
             BtnSatisGuncelle.Enabled = false;
-            BtnSatisSil.Enabled = false;
+        }
+        private void güncelleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BtnSatisEkle.Enabled = false;
+            BtnSatisGuncelle.Enabled = true;
+            TBoxSatisNo.Text = dataGridView1.CurrentRow.Cells[0].Value.ToString();
+            TBoxKutulama.Text = dataGridView1.CurrentRow.Cells[1].Value.ToString();
+            CBoxSatisTuru.Text = dataGridView1.CurrentRow.Cells[2].Value.ToString();
+            TBoxSatisMiktar.Text = dataGridView1.CurrentRow.Cells[3].Value.ToString();
+            TBoxSatisTutari.Text = dataGridView1.CurrentRow.Cells[4].Value.ToString();
+            DTPSatis.Value = Convert.ToDateTime(dataGridView1.CurrentRow.Cells[5].Value);
+        }
 
+        private void silToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Seçili Satış İşlemini \nSilmek istiyor musunuz?", "Silme Onayı", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                SatisSil();
+            }
         }
     }
 }

@@ -44,13 +44,12 @@
             this.label7 = new System.Windows.Forms.Label();
             this.DTPAlimTarih = new System.Windows.Forms.DateTimePicker();
             this.BtnAlimEkle = new System.Windows.Forms.Button();
-            this.CBoxMalNo = new System.Windows.Forms.ComboBox();
-            this.BtnAlimSil = new System.Windows.Forms.Button();
             this.BtnAlimGuncelle = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.güncelleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.silToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CBoxMalNo = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -71,7 +70,7 @@
             this.TBoxAlimNo.Name = "TBoxAlimNo";
             this.TBoxAlimNo.ReadOnly = true;
             this.TBoxAlimNo.Size = new System.Drawing.Size(100, 22);
-            this.TBoxAlimNo.TabIndex = 1;
+            this.TBoxAlimNo.TabIndex = 7;
             // 
             // label2
             // 
@@ -80,7 +79,7 @@
             this.label2.Location = new System.Drawing.Point(105, 91);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(74, 22);
-            this.label2.TabIndex = 2;
+            this.label2.TabIndex = 1;
             this.label2.Text = "Mal Adı:";
             // 
             // label3
@@ -90,7 +89,7 @@
             this.label3.Location = new System.Drawing.Point(95, 140);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(84, 22);
-            this.label3.TabIndex = 4;
+            this.label3.TabIndex = 2;
             this.label3.Text = "Mal SKT:";
             // 
             // DTPMalSKT
@@ -99,7 +98,7 @@
             this.DTPMalSKT.Location = new System.Drawing.Point(194, 140);
             this.DTPMalSKT.Name = "DTPMalSKT";
             this.DTPMalSKT.Size = new System.Drawing.Size(239, 27);
-            this.DTPMalSKT.TabIndex = 5;
+            this.DTPMalSKT.TabIndex = 9;
             // 
             // label4
             // 
@@ -108,7 +107,7 @@
             this.label4.Location = new System.Drawing.Point(37, 193);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(142, 22);
-            this.label4.TabIndex = 6;
+            this.label4.TabIndex = 3;
             this.label4.Text = "Alım Miktarı (kg):";
             // 
             // TBoxAlimMiktar
@@ -116,7 +115,7 @@
             this.TBoxAlimMiktar.Location = new System.Drawing.Point(194, 193);
             this.TBoxAlimMiktar.Name = "TBoxAlimMiktar";
             this.TBoxAlimMiktar.Size = new System.Drawing.Size(100, 22);
-            this.TBoxAlimMiktar.TabIndex = 7;
+            this.TBoxAlimMiktar.TabIndex = 10;
             // 
             // label5
             // 
@@ -125,7 +124,7 @@
             this.label5.Location = new System.Drawing.Point(63, 242);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(116, 22);
-            this.label5.TabIndex = 8;
+            this.label5.TabIndex = 4;
             this.label5.Text = "Ödeme Türü:";
             // 
             // TBoxAlimTutari
@@ -133,7 +132,7 @@
             this.TBoxAlimTutari.Location = new System.Drawing.Point(194, 289);
             this.TBoxAlimTutari.Name = "TBoxAlimTutari";
             this.TBoxAlimTutari.Size = new System.Drawing.Size(100, 22);
-            this.TBoxAlimTutari.TabIndex = 9;
+            this.TBoxAlimTutari.TabIndex = 12;
             // 
             // label6
             // 
@@ -142,11 +141,12 @@
             this.label6.Location = new System.Drawing.Point(78, 287);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(101, 22);
-            this.label6.TabIndex = 10;
+            this.label6.TabIndex = 5;
             this.label6.Text = "Alım Tutarı:";
             // 
             // CBoxOdemeTuru
             // 
+            this.CBoxOdemeTuru.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CBoxOdemeTuru.FormattingEnabled = true;
             this.CBoxOdemeTuru.Items.AddRange(new object[] {
             "Kredi Kartı",
@@ -163,7 +163,7 @@
             this.label7.Location = new System.Drawing.Point(79, 336);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(100, 22);
-            this.label7.TabIndex = 12;
+            this.label7.TabIndex = 6;
             this.label7.Text = "Alım Tarihi:";
             // 
             // DTPAlimTarih
@@ -182,7 +182,7 @@
             this.BtnAlimEkle.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
             this.BtnAlimEkle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.BtnAlimEkle.ForeColor = System.Drawing.Color.Black;
-            this.BtnAlimEkle.Location = new System.Drawing.Point(351, 404);
+            this.BtnAlimEkle.Location = new System.Drawing.Point(333, 404);
             this.BtnAlimEkle.Name = "BtnAlimEkle";
             this.BtnAlimEkle.Size = new System.Drawing.Size(100, 65);
             this.BtnAlimEkle.TabIndex = 14;
@@ -190,8 +190,68 @@
             this.BtnAlimEkle.UseVisualStyleBackColor = false;
             this.BtnAlimEkle.Click += new System.EventHandler(this.BtnAlimEkle_Click);
             // 
+            // BtnAlimGuncelle
+            // 
+            this.BtnAlimGuncelle.BackColor = System.Drawing.Color.MistyRose;
+            this.BtnAlimGuncelle.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.BtnAlimGuncelle.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+            this.BtnAlimGuncelle.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.BtnAlimGuncelle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.BtnAlimGuncelle.ForeColor = System.Drawing.Color.Black;
+            this.BtnAlimGuncelle.Location = new System.Drawing.Point(67, 404);
+            this.BtnAlimGuncelle.Name = "BtnAlimGuncelle";
+            this.BtnAlimGuncelle.Size = new System.Drawing.Size(114, 65);
+            this.BtnAlimGuncelle.TabIndex = 15;
+            this.BtnAlimGuncelle.Text = "Alımı Güncelle";
+            this.BtnAlimGuncelle.UseVisualStyleBackColor = false;
+            this.BtnAlimGuncelle.Click += new System.EventHandler(this.BtnAlimGuncelle_Click);
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowDrop = true;
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.Snow;
+            this.dataGridView1.ColumnHeadersHeight = 29;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
+            this.dataGridView1.GridColor = System.Drawing.Color.MistyRose;
+            this.dataGridView1.Location = new System.Drawing.Point(502, 47);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersWidth = 51;
+            this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridView1.RowTemplate.Height = 24;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(586, 422);
+            this.dataGridView1.TabIndex = 17;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.güncelleToolStripMenuItem,
+            this.silToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(136, 52);
+            // 
+            // güncelleToolStripMenuItem
+            // 
+            this.güncelleToolStripMenuItem.Name = "güncelleToolStripMenuItem";
+            this.güncelleToolStripMenuItem.Size = new System.Drawing.Size(135, 24);
+            this.güncelleToolStripMenuItem.Text = "Güncelle";
+            this.güncelleToolStripMenuItem.Click += new System.EventHandler(this.güncelleToolStripMenuItem_Click);
+            // 
+            // silToolStripMenuItem
+            // 
+            this.silToolStripMenuItem.Name = "silToolStripMenuItem";
+            this.silToolStripMenuItem.Size = new System.Drawing.Size(135, 24);
+            this.silToolStripMenuItem.Text = "Sil";
+            this.silToolStripMenuItem.Click += new System.EventHandler(this.silToolStripMenuItem_Click);
+            // 
             // CBoxMalNo
             // 
+            this.CBoxMalNo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CBoxMalNo.FormattingEnabled = true;
             this.CBoxMalNo.Items.AddRange(new object[] {
             "Beyaz Kuvertur Çikolata",
@@ -209,77 +269,7 @@
             this.CBoxMalNo.Location = new System.Drawing.Point(194, 91);
             this.CBoxMalNo.Name = "CBoxMalNo";
             this.CBoxMalNo.Size = new System.Drawing.Size(239, 24);
-            this.CBoxMalNo.TabIndex = 16;
-            // 
-            // BtnAlimSil
-            // 
-            this.BtnAlimSil.BackColor = System.Drawing.Color.MistyRose;
-            this.BtnAlimSil.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.BtnAlimSil.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-            this.BtnAlimSil.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
-            this.BtnAlimSil.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.BtnAlimSil.ForeColor = System.Drawing.Color.Black;
-            this.BtnAlimSil.Location = new System.Drawing.Point(34, 404);
-            this.BtnAlimSil.Name = "BtnAlimSil";
-            this.BtnAlimSil.Size = new System.Drawing.Size(114, 65);
-            this.BtnAlimSil.TabIndex = 17;
-            this.BtnAlimSil.Text = "Alımı Sil";
-            this.BtnAlimSil.UseVisualStyleBackColor = false;
-            // 
-            // BtnAlimGuncelle
-            // 
-            this.BtnAlimGuncelle.BackColor = System.Drawing.Color.MistyRose;
-            this.BtnAlimGuncelle.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.BtnAlimGuncelle.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-            this.BtnAlimGuncelle.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
-            this.BtnAlimGuncelle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.BtnAlimGuncelle.ForeColor = System.Drawing.Color.Black;
-            this.BtnAlimGuncelle.Location = new System.Drawing.Point(165, 404);
-            this.BtnAlimGuncelle.Name = "BtnAlimGuncelle";
-            this.BtnAlimGuncelle.Size = new System.Drawing.Size(114, 65);
-            this.BtnAlimGuncelle.TabIndex = 18;
-            this.BtnAlimGuncelle.Text = "Alımı Güncelle";
-            this.BtnAlimGuncelle.UseVisualStyleBackColor = false;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowDrop = true;
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.BackgroundColor = System.Drawing.Color.Snow;
-            this.dataGridView1.ColumnHeadersHeight = 29;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dataGridView1.GridColor = System.Drawing.Color.MistyRose;
-            this.dataGridView1.Location = new System.Drawing.Point(502, 47);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(586, 422);
-            this.dataGridView1.TabIndex = 19;
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.güncelleToolStripMenuItem,
-            this.silToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(136, 52);
-            // 
-            // güncelleToolStripMenuItem
-            // 
-            this.güncelleToolStripMenuItem.Name = "güncelleToolStripMenuItem";
-            this.güncelleToolStripMenuItem.Size = new System.Drawing.Size(135, 24);
-            this.güncelleToolStripMenuItem.Text = "Güncelle";
-            // 
-            // silToolStripMenuItem
-            // 
-            this.silToolStripMenuItem.Name = "silToolStripMenuItem";
-            this.silToolStripMenuItem.Size = new System.Drawing.Size(135, 24);
-            this.silToolStripMenuItem.Text = "Sil";
+            this.CBoxMalNo.TabIndex = 8;
             // 
             // Alımlar
             // 
@@ -289,7 +279,6 @@
             this.ClientSize = new System.Drawing.Size(1120, 532);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.BtnAlimGuncelle);
-            this.Controls.Add(this.BtnAlimSil);
             this.Controls.Add(this.CBoxMalNo);
             this.Controls.Add(this.BtnAlimEkle);
             this.Controls.Add(this.DTPAlimTarih);
@@ -333,12 +322,11 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.DateTimePicker DTPAlimTarih;
         private System.Windows.Forms.Button BtnAlimEkle;
-        private System.Windows.Forms.ComboBox CBoxMalNo;
-        private System.Windows.Forms.Button BtnAlimSil;
         private System.Windows.Forms.Button BtnAlimGuncelle;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem güncelleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem silToolStripMenuItem;
+        private System.Windows.Forms.ComboBox CBoxMalNo;
     }
 }

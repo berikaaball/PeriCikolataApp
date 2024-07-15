@@ -85,7 +85,7 @@
             this.BtnGiris.Location = new System.Drawing.Point(181, 202);
             this.BtnGiris.Name = "BtnGiris";
             this.BtnGiris.Size = new System.Drawing.Size(85, 49);
-            this.BtnGiris.TabIndex = 11;
+            this.BtnGiris.TabIndex = 4;
             this.BtnGiris.Text = "Giriş";
             this.BtnGiris.UseVisualStyleBackColor = false;
             this.BtnGiris.Click += new System.EventHandler(this.BtnGiris_Click);
@@ -99,7 +99,7 @@
             this.btnKapat.Location = new System.Drawing.Point(311, 202);
             this.btnKapat.Name = "btnKapat";
             this.btnKapat.Size = new System.Drawing.Size(48, 49);
-            this.btnKapat.TabIndex = 12;
+            this.btnKapat.TabIndex = 5;
             this.btnKapat.UseVisualStyleBackColor = false;
             this.btnKapat.Click += new System.EventHandler(this.btnKapat_Click);
             // 

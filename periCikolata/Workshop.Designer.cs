@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Workshop));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -40,10 +41,13 @@
             this.AdresTBox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.EtkNoTBox = new System.Windows.Forms.TextBox();
-            this.BtnEtkinlikSil = new System.Windows.Forms.Button();
             this.BtnEtkinlikGuncelle = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.güncelleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.silToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -53,7 +57,7 @@
             this.label1.Location = new System.Drawing.Point(82, 122);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(103, 22);
-            this.label1.TabIndex = 0;
+            this.label1.TabIndex = 1;
             this.label1.Text = "Etkinlik Adı:";
             // 
             // label2
@@ -63,7 +67,7 @@
             this.label2.Location = new System.Drawing.Point(64, 175);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(123, 22);
-            this.label2.TabIndex = 1;
+            this.label2.TabIndex = 2;
             this.label2.Text = "Etkinlik Tarihi:";
             // 
             // label3
@@ -73,7 +77,7 @@
             this.label3.Location = new System.Drawing.Point(28, 233);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(160, 22);
-            this.label3.TabIndex = 2;
+            this.label3.TabIndex = 3;
             this.label3.Text = "Etkinlik Kapasitesi:";
             // 
             // EtkAdTBox
@@ -82,30 +86,30 @@
             this.EtkAdTBox.Multiline = true;
             this.EtkAdTBox.Name = "EtkAdTBox";
             this.EtkAdTBox.Size = new System.Drawing.Size(138, 22);
-            this.EtkAdTBox.TabIndex = 3;
+            this.EtkAdTBox.TabIndex = 6;
             // 
             // dateTimePicker1
             // 
             this.dateTimePicker1.Location = new System.Drawing.Point(198, 175);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(200, 22);
-            this.dateTimePicker1.TabIndex = 4;
+            this.dateTimePicker1.TabIndex = 7;
             // 
             // KapasiteTBox
             // 
             this.KapasiteTBox.Location = new System.Drawing.Point(198, 231);
             this.KapasiteTBox.Name = "KapasiteTBox";
             this.KapasiteTBox.Size = new System.Drawing.Size(100, 22);
-            this.KapasiteTBox.TabIndex = 5;
+            this.KapasiteTBox.TabIndex = 8;
             // 
             // EtkKaydetBtn
             // 
             this.EtkKaydetBtn.BackColor = System.Drawing.Color.MistyRose;
             this.EtkKaydetBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.EtkKaydetBtn.Location = new System.Drawing.Point(464, 334);
+            this.EtkKaydetBtn.Location = new System.Drawing.Point(304, 334);
             this.EtkKaydetBtn.Name = "EtkKaydetBtn";
             this.EtkKaydetBtn.Size = new System.Drawing.Size(155, 74);
-            this.EtkKaydetBtn.TabIndex = 6;
+            this.EtkKaydetBtn.TabIndex = 10;
             this.EtkKaydetBtn.Text = "Etkinliği Kaydet";
             this.EtkKaydetBtn.UseVisualStyleBackColor = false;
             this.EtkKaydetBtn.Click += new System.EventHandler(this.EtkKaydetBtn_Click_1);
@@ -117,7 +121,7 @@
             this.label4.Location = new System.Drawing.Point(58, 290);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(128, 22);
-            this.label4.TabIndex = 7;
+            this.label4.TabIndex = 4;
             this.label4.Text = "Etkinlik Adresi:";
             // 
             // AdresTBox
@@ -126,7 +130,7 @@
             this.AdresTBox.Multiline = true;
             this.AdresTBox.Name = "AdresTBox";
             this.AdresTBox.Size = new System.Drawing.Size(152, 22);
-            this.AdresTBox.TabIndex = 8;
+            this.AdresTBox.TabIndex = 9;
             // 
             // label5
             // 
@@ -135,7 +139,7 @@
             this.label5.Location = new System.Drawing.Point(34, 70);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(153, 22);
-            this.label5.TabIndex = 9;
+            this.label5.TabIndex = 0;
             this.label5.Text = "Etkinlik Numarası:";
             // 
             // EtkNoTBox
@@ -144,28 +148,16 @@
             this.EtkNoTBox.Name = "EtkNoTBox";
             this.EtkNoTBox.ReadOnly = true;
             this.EtkNoTBox.Size = new System.Drawing.Size(100, 22);
-            this.EtkNoTBox.TabIndex = 10;
-            // 
-            // BtnEtkinlikSil
-            // 
-            this.BtnEtkinlikSil.BackColor = System.Drawing.Color.MistyRose;
-            this.BtnEtkinlikSil.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.BtnEtkinlikSil.Location = new System.Drawing.Point(63, 334);
-            this.BtnEtkinlikSil.Name = "BtnEtkinlikSil";
-            this.BtnEtkinlikSil.Size = new System.Drawing.Size(155, 74);
-            this.BtnEtkinlikSil.TabIndex = 11;
-            this.BtnEtkinlikSil.Text = "Etkinliği Sil";
-            this.BtnEtkinlikSil.UseVisualStyleBackColor = false;
-            this.BtnEtkinlikSil.Click += new System.EventHandler(this.BtnEtkinlikSil_Click);
+            this.EtkNoTBox.TabIndex = 5;
             // 
             // BtnEtkinlikGuncelle
             // 
             this.BtnEtkinlikGuncelle.BackColor = System.Drawing.Color.MistyRose;
             this.BtnEtkinlikGuncelle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.BtnEtkinlikGuncelle.Location = new System.Drawing.Point(224, 334);
+            this.BtnEtkinlikGuncelle.Location = new System.Drawing.Point(38, 334);
             this.BtnEtkinlikGuncelle.Name = "BtnEtkinlikGuncelle";
             this.BtnEtkinlikGuncelle.Size = new System.Drawing.Size(155, 74);
-            this.BtnEtkinlikGuncelle.TabIndex = 12;
+            this.BtnEtkinlikGuncelle.TabIndex = 11;
             this.BtnEtkinlikGuncelle.Text = "Etkinliği Güncelle";
             this.BtnEtkinlikGuncelle.UseVisualStyleBackColor = false;
             this.BtnEtkinlikGuncelle.Click += new System.EventHandler(this.BtnEtkinlikGuncelle_Click);
@@ -174,13 +166,39 @@
             // 
             this.dataGridView1.BackgroundColor = System.Drawing.Color.Snow;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
             this.dataGridView1.GridColor = System.Drawing.Color.MistyRose;
             this.dataGridView1.Location = new System.Drawing.Point(464, 47);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(504, 265);
             this.dataGridView1.TabIndex = 13;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.güncelleToolStripMenuItem,
+            this.silToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(136, 52);
+            // 
+            // güncelleToolStripMenuItem
+            // 
+            this.güncelleToolStripMenuItem.Name = "güncelleToolStripMenuItem";
+            this.güncelleToolStripMenuItem.Size = new System.Drawing.Size(135, 24);
+            this.güncelleToolStripMenuItem.Text = "Güncelle";
+            this.güncelleToolStripMenuItem.Click += new System.EventHandler(this.güncelleToolStripMenuItem_Click);
+            // 
+            // silToolStripMenuItem
+            // 
+            this.silToolStripMenuItem.Name = "silToolStripMenuItem";
+            this.silToolStripMenuItem.Size = new System.Drawing.Size(135, 24);
+            this.silToolStripMenuItem.Text = "Sil";
+            this.silToolStripMenuItem.Click += new System.EventHandler(this.silToolStripMenuItem_Click);
             // 
             // Workshop
             // 
@@ -190,7 +208,6 @@
             this.ClientSize = new System.Drawing.Size(994, 450);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.BtnEtkinlikGuncelle);
-            this.Controls.Add(this.BtnEtkinlikSil);
             this.Controls.Add(this.EtkNoTBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.AdresTBox);
@@ -208,6 +225,7 @@
             this.Text = "Workshop";
             this.Load += new System.EventHandler(this.Workshop_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -226,8 +244,10 @@
         private System.Windows.Forms.TextBox AdresTBox;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox EtkNoTBox;
-        private System.Windows.Forms.Button BtnEtkinlikSil;
         private System.Windows.Forms.Button BtnEtkinlikGuncelle;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem güncelleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem silToolStripMenuItem;
     }
 }

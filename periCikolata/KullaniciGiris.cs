@@ -24,51 +24,24 @@ namespace periCikolata
 
 
         #region Bağlantı Tanımlamaları
-
-        static string connectionString = "Data Source=DESKTOP-RORVUON\\SQLEXPRESS;Initial Catalog=PeriCikolata;Integrated Security=True";
-        SqlConnection connection = new SqlConnection(connectionString);
-        SqlCommand command = new SqlCommand();
-        SqlDataAdapter adapter = new SqlDataAdapter();
+   
         #endregion
 
 
         #region Bağlantı Olayları
 
-        private void KomutCalistir(string Komut)
-        {
-            try
-            {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
-                command.Connection = connection;
-                command.CommandText = Komut;
-                command.ExecuteNonQuery();
-
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Bağlantıda bir problem oluştu.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-            }
-            finally
-            {
-                if (connection.State == ConnectionState.Open)
-                    connection.Close();
-            }
-
-        }
 
         private bool Kontrol(string KullaniciAdi)
         {
             try
             {
                 string Komut = "SELECT COUNT(*) FROM Kullanicilar WHERE KullaniciAdi=@kullaniciAdi";
-                SqlCommand command = new SqlCommand(Komut, connection);
-                command.Parameters.AddWithValue("@kullaniciAdi", KullaniciAdi);
-                //command.Parameters.AddWithValue("@sifre", sifre);
-                KomutCalistir(Komut);
+                VtIslem.command.Parameters.Clear();
+                VtIslem.command.Parameters.AddWithValue("@KullaniciAdi", KullaniciAdi);
+  
+                VtIslem.KomutCalistir(Komut);
 
-                int kullaniciSayisi = (int)command.ExecuteScalar();
+                int kullaniciSayisi = (int)VtIslem.command.ExecuteScalar();
                 return kullaniciSayisi > 0;
             }
             catch (Exception msg)
@@ -87,11 +60,11 @@ namespace periCikolata
                 string kullaniciAdi = TBoxKullaniciAdi.Text;
                 string sifre = TBoxSifre.Text;
 
-               if (Kontrol(kullaniciAdi))
+            if (Kontrol(kullaniciAdi))
             {
 
             }
-               else
+            else
             {
                 MessageBox.Show("Kullanıcı bulunamadı! Kullanıcı adı veya şifre hatalı.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -105,7 +78,7 @@ namespace periCikolata
             if (TBoxKullaniciAdi.Text.Trim() != "" & TBoxSifre.Text.Trim() != "")
             {
                 string Komut = "Insert into KullaniciBilgileri (KullaniciAdi,KullaniciSifresi) Values ('" + TBoxKullaniciAdi.Text + "','" + TBoxSifre.Text + "')";
-                KomutCalistir(Komut);
+                VtIslem.KomutCalistir(Komut);
 
                 MessageBox.Show("Kullanıcı eklendi.","Bilgi",MessageBoxButtons.OK, MessageBoxIcon.Information);
                 TBoxKullaniciAdi.Clear();
@@ -122,7 +95,7 @@ namespace periCikolata
             try
             {
                 string Komut = "Delete * From KullaniciBilgileri where KullaniciAdi='" + TBoxKullaniciAdi.Text+ "'";
-                KomutCalistir(Komut);
+                VtIslem.KomutCalistir(Komut);
 
             }
             catch (Exception msg)
